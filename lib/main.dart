@@ -40,7 +40,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Map<DateTime, List<Event>> selectedEvents;
+  Map<DateTime, List<Event>> selectedEvents = {};
   CalendarFormat format = CalendarFormat.month;
   DateTime selectedDay = DateTime.now();
   DateTime focusedDay = DateTime.now();
@@ -108,18 +108,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   shape: BoxShape.circle,
                 )),
           ),
-          ..._getEventsFromDay(selectedDay).map((Event event) => Card(
-                child: ListView.builder(
-                  itemCount: selectedEvents.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: Container(
-                        child: Text(event.title),
-                      ),
-                    );
-                  },
-                ),
-              ))
+          Expanded(
+            child: ListView.builder(
+              itemCount: _getEventsFromDay(selectedDay).length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: Container(
+                    child: Text(_getEventsFromDay(selectedDay)[index].title),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -128,7 +128,15 @@ class _MyHomePageState extends State<MyHomePage> {
             builder: (context) {
               return MenuPage(
                 onSaved: (data) {
-                 
+                  setState(() {
+                    if (selectedEvents.containsKey(selectedDay)) {
+                      selectedEvents[selectedDay].add(data);
+                    } else {
+                      selectedEvents.addAll({
+                        selectedDay: [data]
+                      });
+                    }
+                  });
                 },
               );
             },
