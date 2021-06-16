@@ -129,9 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
               return MenuPage(
                 onSaved: (data) {
                   setState(() {
+                    /// selectedEventsにselectedDayがあるかを確認
                     if (selectedEvents.containsKey(selectedDay)) {
+                      /// あったらselectedDayの値（List<Event>）にdataを追加
                       selectedEvents[selectedDay].add(data);
                     } else {
+                      /// なかったらselectedDayとdataをセットで追加。
+                      ///　値の型に合わせてリストの形でdataを追加する。
                       selectedEvents.addAll({
                         selectedDay: [data]
                       });
