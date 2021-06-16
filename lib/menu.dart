@@ -8,7 +8,7 @@ class MenuPage extends StatefulWidget {
   final void Function(Event) onSaved;
 
   MenuPage({
-    this.onSaved,
+    @required this.onSaved,
   });
 
   @override
@@ -92,50 +92,51 @@ class _MenuPageState extends State<MenuPage> {
               },
               onTap: () {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return SimpleDialog(
-                        title: Text(
-                          'メニューを登録する',
-                          textAlign: TextAlign.center,
-                        ),
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(4),
-                                child: SizedBox(
-                                  width: 70,
-                                  child: ElevatedButton(
-                                    child: Text('いいえ'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
+                  context: context,
+                  builder: (context) {
+                    return SimpleDialog(
+                      title: Text(
+                        'メニューを登録する',
+                        textAlign: TextAlign.center,
+                      ),
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(4),
+                              child: SizedBox(
+                                width: 70,
+                                child: ElevatedButton(
+                                  child: Text('いいえ'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
                               ),
-                              Container(
-                                padding: EdgeInsets.all(4),
-                                child: SizedBox(
-                                  width: 70,
-                                  child: ElevatedButton(
-                                    child: Text('はい'),
-                                    onPressed: () {
-                                      final data = Event(
-                                        title: trainingMenu[index]
-                                      );
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(4),
+                              child: SizedBox(
+                                width: 70,
+                                child: ElevatedButton(
+                                  child: Text('はい'),
+                                  onPressed: () {
+                                    final data =
+                                        Event(title: trainingMenu[index]);
 
-                                      widget.onSaved(data);
-                                      Navigator.of(context).popUntil((route) => route.isFirst);
-                                    },
-                                  ),
+                                    widget.onSaved(data);
+                                    Navigator.of(context)
+                                        .popUntil((route) => route.isFirst);
+                                  },
                                 ),
                               ),
-                            ],
-                          )
-                        ],
-                      );
-                    });
+                            ),
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                );
               },
               child: Card(
                   child: Text(
