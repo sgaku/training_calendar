@@ -35,15 +35,12 @@ class _MenuPageState extends State<MenuPage> {
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_outlined),
-          onPressed: (){
-
-            final eventList = trainingMenu.map((e) => Event(title: e));
+          onPressed: () {
+            final eventList = trainingMenu.map((e) => Event(title: e)).toList();
             widget.onSaved(eventList);
             Navigator.pop(context);
-
           },
         ),
-
       ),
       body: ListView.builder(
         itemExtent: 50,
@@ -102,7 +99,6 @@ class _MenuPageState extends State<MenuPage> {
                     );
                   });
             },
-
             child: Card(
               child: Text(
                 trainingMenu[index],
