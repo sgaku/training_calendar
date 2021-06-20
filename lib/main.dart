@@ -44,13 +44,19 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Map<DateTime, List<Event>> selectedEvents = {};
   CalendarFormat format = CalendarFormat.month;
-  DateTime selectedDay = DateTime.now();
+  DateTime now = DateTime.now();
+  DateTime selectedDay;
   DateTime focusedDay = DateTime.now();
 
   @override
   void initState() {
-    selectedEvents = {};
     super.initState();
+    selectedEvents = {};
+
+    /// TableCalendarは日時までしかselectedDayに代入しない。
+    /// DateTime.now()だと秒数まで代入してしまって、TableCalendarの想定する
+    /// 日時とずれが生じて表示されなくなってしまう。
+    selectedDay = DateTime.utc(now.year, now.month, now.day);
   }
 
   List<Event> _getEventsFromDay(DateTime date) {
@@ -197,12 +203,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     /// selectedEventsにselectedDayがあるかを確認
                     if (selectedEvents.containsKey(selectedDay)) {
                       /// あったらselectedDayの値（List<Event>）にdataを追加
-                      selectedEvents[selectedDay].add(data);
+                      selectedEvents[selectedDay].addAll(data);
                     } else {
                       /// なかったらselectedDayとdataをセットで追加。
                       ///　値の型に合わせてリストの形でdataを追加する。
                       selectedEvents.addAll({
-                        selectedDay: [data]
+                        selectedDay: data
                       });
                     }
                   });
