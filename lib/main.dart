@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       home: MyHomePage(title: 'トレーニングカレンダー'),
     );
@@ -98,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   shape: BoxShape.circle,
                 ),
                 selectedDecoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: Colors.blueGrey,
                   shape: BoxShape.circle,
                 ),
                 selectedTextStyle: TextStyle(color: Colors.white),
@@ -112,9 +114,72 @@ class _MyHomePageState extends State<MyHomePage> {
             child: ListView.builder(
               itemCount: _getEventsFromDay(selectedDay).length,
               itemBuilder: (context, index) {
-                return Card(
-                  child: Container(
-                    child: Text(_getEventsFromDay(selectedDay)[index].title),
+                return GestureDetector(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return SimpleDialog(
+                            title: Text(
+                              '削除する',
+                              textAlign: TextAlign.center,
+                            ),
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: SizedBox(
+                                      width: 70,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          'いいえ',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 12.5,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(4),
+                                    child: SizedBox(
+                                      width: 70,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            selectedEvents[selectedDay]
+                                                .removeAt(index);
+                                          });
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('はい'),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          );
+                        });
+                  },
+                  child: Card(
+
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      child: Text(
+                        _getEventsFromDay(selectedDay)[index].title,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
@@ -147,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ));
         },
         label: Text('トレーニングを追加'),
+        icon: Icon(Icons.add),
       ),
     );
   }
