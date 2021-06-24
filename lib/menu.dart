@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_training_calendar2/main.dart';
+import 'package:flutter_training_calendar2/sharedPreferences.dart';
 
 class MenuPage extends StatefulWidget {
   final void Function(List<Event>) onSaved;
@@ -25,6 +26,8 @@ class _MenuPageState extends State<MenuPage> {
   void initState() {
     super.initState();
     controller = TextEditingController(text: menu);
+
+    trainingMenu = SimplePreferences.getMenu() ?? [];
   }
 
   @override
@@ -34,13 +37,25 @@ class _MenuPageState extends State<MenuPage> {
         title: Text('メニュー'),
         automaticallyImplyLeading: false,
         leading: IconButton(
+          tooltip: '保存せずに戻る',
           icon: Icon(Icons.arrow_back_outlined),
-          onPressed: () {
-            final eventList = trainingMenu.map((e) => Event(title: e)).toList();
-            widget.onSaved(eventList);
+          onPressed: () async {
+            await SimplePreferences.setMenu(trainingMenu);
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+              tooltip: '保存する',
+              icon: Icon(Icons.save_alt_sharp),
+              onPressed: () async {
+                await SimplePreferences.setMenu(trainingMenu);
+                final eventList =
+                    trainingMenu.map((e) => Event(title: e)).toList();
+                widget.onSaved(eventList);
+                Navigator.pop(context);
+              })
+        ],
       ),
       body: ListView.builder(
         itemExtent: 50,

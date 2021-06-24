@@ -2,11 +2,23 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_training_calendar2/sharedPreferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'menu.dart';
 
-void main() {
+
+
+Future main()  async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  await SimplePreferences.init();
+
   runApp(MyApp());
 }
 
